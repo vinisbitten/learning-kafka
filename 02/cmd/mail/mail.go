@@ -1,17 +1,23 @@
 package mail
 
 type Mail struct {
-	body []byte
-	sender Sender
-	receiver Receiver
+	Body     string
+	Receiver Receiver
+	Sender   Sender
+	Smtp     SmtpServerConf
+	Subject  string
 }
 
 type Sender struct {
-	Id []byte
-	Password []byte
+	Id       string
+	Password string
 }
 
 type Receiver struct {
-	host []byte
-	port []byte
+	Id string
+}
+
+type SmtpServerConf struct {
+	Host string
+	Port string
 }
