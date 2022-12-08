@@ -1,8 +1,6 @@
 # Learning Kafka
 
-This is a repository to save my kafka progress.
-I'll be working with Go while learning the Kafka technologies.
-Remember to remove the docker containers after finishing a project.
+This is a repository to save my kafka progress. I'll be working with Go while learning the Kafka technologies. *Remember to remove the docker containers* after finishing a project.
 
 ## Project 01
 
