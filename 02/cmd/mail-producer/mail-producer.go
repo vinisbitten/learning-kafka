@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 
@@ -46,7 +47,7 @@ func main() {
 
 	mailMessage := newMail(body, sbjct, rc, sd, smtp)
 
-	kafkaMailMessage := []byte(mailMessage)
+	kafkaMailMessage := JsonMail(mailMessage)
 
 	// key might be []byte("email")
 	Publish(kafkaMailMessage, "mail", producer, nil, deliveryChan)
@@ -56,15 +57,24 @@ func main() {
 	producer.Flush(5000)
 }
 
-func newMail(body string, subject string, receiver mail.Receiver, sender mail.Sender, smtp mail.SmtpServerConf) (mailMessage []byte) {
-	mailSchema := mail.Mail{
+// marshall json
+func JsonMail(mail mail.Mail) (producerMessage []byte) {
+	producerMessage, err := json.Marshal(mail)
+	if err != nil {
+		log.Println("Erro ao codificar json:", err.Error())
+		return
+	}
+	return
+}
+
+func newMail(body string, subject string, receiver mail.Receiver, sender mail.Sender, smtp mail.SmtpServerConf) (myMail mail.Mail) {
+	myMail = mail.Mail{
 		Body:     body,
 		Subject:  subject,
 		Receiver: receiver,
 		Sender:   sender,
 		Smtp:     smtp,
 	}
-	mailMessage = []byte(fmt.Sprintf("%v", mailSchema))
 	return
 }
 

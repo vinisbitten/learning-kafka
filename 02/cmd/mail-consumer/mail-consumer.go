@@ -1,9 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
-	"strings"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/vinisbitten/learning-kafka/02/cmd/mail"
@@ -24,10 +24,9 @@ func main() {
 	for {
 		msg, err := consumer.ReadMessage(-1)
 		if err == nil {
-			// IMPLEMENT EMAIL SENDING
-			// fmt.Println(string(msg.Value), msg.TopicPartition)
-			mailSchema := WorkKafkaMessage(msg)
-
+			fmt.Println(msg.Value)
+			myMail := JsonMail(msg.Value)
+			fmt.Printf("%#v", myMail)
 		} else {
 			log.Print("Mensagem com erro:", err.Error())
 		}
@@ -50,19 +49,12 @@ func NewKafkaConsumer() (consumer *kafka.Consumer, err error) {
 	return
 }
 
-func WorkKafkaMessage(msg *kafka.Message) (mailSchema mail.Mail){
-	slpitedMsg := strings.Split(string(msg.Value), ",")
-	mailMessage := make()
+// unmarshall json
+func JsonMail(producerMessage []byte) (mail mail.Mail) {
+	err := json.Unmarshal(producerMessage, &mail)
+	if err != nil {
+		log.Println("Erro ao decodificar json:", err.Error())
+		return
+	}
+	return
 }
-
-// func newMail(body string, subject string, receiver mail.Receiver, sender mail.Sender, smtp mail.SmtpServerConf) (mailMessage []byte) {
-// 	mailSchema := mail.Mail{
-// 		Body:     body,
-// 		Subject:  subject,
-// 		Receiver: receiver,
-// 		Sender:   sender,
-// 		Smtp:     smtp,
-// 	}
-// 	mailMessage = []byte(fmt.Sprintf("%#v", mailSchema))
-// 	return
-// }
