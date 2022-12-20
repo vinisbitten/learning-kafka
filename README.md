@@ -45,4 +45,4 @@ go run cmd/producer/main.go
 
 ## Project 02
 
-This is a bit more complicated project using goworkers to publish and send emails.
+This is a bit more complicated project using go routines to publish and send emails.

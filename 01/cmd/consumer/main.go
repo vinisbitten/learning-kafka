@@ -13,7 +13,7 @@ func main() {
 		"client.id": "go-first-consumer",
 		// kafka group id
 		"group.id": "first-consumers",
-
+		// to consume all messages
 		"auto.offset.reset": "earliest",
 	}
 	consumer, err := kafka.NewConsumer(configMap)

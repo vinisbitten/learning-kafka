@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 
@@ -24,9 +23,13 @@ func main() {
 	for {
 		msg, err := consumer.ReadMessage(-1)
 		if err == nil {
-			fmt.Println(msg.Value)
-			myMail := JsonMail(msg.Value)
+			myMail, err := mail.NewMail()
+			if err != nil {
+				log.Fatal("Erro ao ler variáveis de ambiente", err.Error())
+			}
+			myMail.DecodeJson(msg.Value)
 			fmt.Printf("%#v", myMail)
+			myMail.Send()
 		} else {
 			log.Print("Mensagem com erro:", err.Error())
 		}
@@ -41,20 +44,9 @@ func NewKafkaConsumer() (consumer *kafka.Consumer, err error) {
 		"client.id": "go-mail-consumer",
 		// kafka group id
 		"group.id": "mail-consumers",
-
 		// to consume all messages
 		// "auto.offset.reset": "earliest",
 	}
 	consumer, err = kafka.NewConsumer(configMap)
-	return
-}
-
-// unmarshall json
-func JsonMail(producerMessage []byte) (mail mail.Mail) {
-	err := json.Unmarshal(producerMessage, &mail)
-	if err != nil {
-		log.Println("Erro ao decodificar json:", err.Error())
-		return
-	}
 	return
 }

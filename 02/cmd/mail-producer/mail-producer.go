@@ -31,23 +31,25 @@ func main() {
 		log.Println("error producer:", err.Error())
 	}
 
-	body := "Seu aluguel de janeiro tá pago"
-	sbjct := "Pagamentos"
-	rc := mail.Receiver{
-		Id: "guilherme@conceitho.com",
-	}
-	sd := mail.Sender{
-		Id:       "suporte@conceitho.com",
-		Password: "123456a.",
-	}
-	smtp := mail.SmtpServerConf{
-		Host: "mail.conceitho.com",
-		Port: "465",
+	myMail, err := mail.NewMail()
+
+	if err != nil {
+		log.Fatal("Erro ao ler variáveis de ambiente", err.Error())
 	}
 
-	mailMessage := newMail(body, sbjct, rc, sd, smtp)
+	myMail.AddReceiver("bittencourt1310@gmail.com")
+	myMail.AddReceiver("guilherme@conceitho.com")
 
-	kafkaMailMessage := JsonMail(mailMessage)
+	fmt.Println(myMail.Receivers[0])
+	myMail.Message = mail.Message{
+		To:      myMail.To(),
+		Body:    "Seu aluguel de janeiro tá pago",
+		Subject: "Pagamentos",
+	}
+
+	kafkaMailMessage := JsonMail(*myMail)
+
+	fmt.Println(string(kafkaMailMessage))
 
 	// key might be []byte("email")
 	Publish(kafkaMailMessage, "mail", producer, nil, deliveryChan)
@@ -59,21 +61,10 @@ func main() {
 
 // marshall json
 func JsonMail(mail mail.Mail) (producerMessage []byte) {
-	producerMessage, err := json.Marshal(mail)
+	producerMessage, err := json.Marshal(mail.Message)
 	if err != nil {
 		log.Println("Erro ao codificar json:", err.Error())
 		return
-	}
-	return
-}
-
-func newMail(body string, subject string, receiver mail.Receiver, sender mail.Sender, smtp mail.SmtpServerConf) (myMail mail.Mail) {
-	myMail = mail.Mail{
-		Body:     body,
-		Subject:  subject,
-		Receiver: receiver,
-		Sender:   sender,
-		Smtp:     smtp,
 	}
 	return
 }
