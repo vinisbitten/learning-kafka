@@ -32,19 +32,15 @@ func main() {
 	}
 
 	myMail, err := mail.NewMail()
-
 	if err != nil {
 		log.Fatal("Erro ao ler variáveis de ambiente", err.Error())
 	}
 
-	myMail.AddReceiver("bittencourt1310@gmail.com")
-	myMail.AddReceiver("guilherme@conceitho.com")
-
-	fmt.Println(myMail.Receivers[0])
+	myMail.AddReceiver("yourmail@yourdomain.com")
 	myMail.Message = mail.Message{
 		To:      myMail.To(),
-		Body:    "Seu aluguel de janeiro tá pago",
-		Subject: "Pagamentos",
+		Body:    "Você ganhou 1 milhão de reais",
+		Subject: "Loteria",
 	}
 
 	kafkaMailMessage := JsonMail(*myMail)
@@ -59,7 +55,7 @@ func main() {
 	producer.Flush(5000)
 }
 
-// marshall json
+// JsonMail turns mail struct into json
 func JsonMail(mail mail.Mail) (producerMessage []byte) {
 	producerMessage, err := json.Marshal(mail.Message)
 	if err != nil {

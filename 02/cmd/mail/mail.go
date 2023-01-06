@@ -3,10 +3,11 @@ package mail
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/spf13/viper"
 	"log"
 	"net/smtp"
 	"strings"
+
+	"github.com/spf13/viper"
 )
 
 type Mail struct {
@@ -22,6 +23,10 @@ type Message struct {
 	Subject string
 }
 
+type Receiver struct {
+	id string
+}
+
 type sender struct {
 	id       string
 	password string
@@ -32,14 +37,12 @@ type smtpConf struct {
 	port string
 }
 
-type Receiver struct {
-	id string
-}
-
+// AddReceiver adds a new receiver to the slice of receivers
 func (m *Mail) AddReceiver(email string) {
 	m.Receivers = append(m.Receivers, email)
 }
 
+// DecodeJson decodes the kafka response
 func (m *Mail) DecodeJson(message []byte) {
 	err := json.Unmarshal(message, &m.Message)
 	if err != nil {
@@ -51,39 +54,7 @@ func (m *Mail) DecodeJson(message []byte) {
 	m.Receivers = receivers
 }
 
-func (m *Mail) Send() {
-	err := smtp.SendMail(m.smtp.address(), m.auth(), m.sender.id, m.Receivers, m.byte())
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
-	fmt.Println("Email sent successfully")
-}
-
-func (m *Mail) auth() smtp.Auth {
-	return smtp.PlainAuth("", m.sender.id, m.sender.password, m.smtp.host)
-}
-
-func (m *Mail) byte() []byte {
-	return []byte("To: " + m.Message.To + "\r\n" +
-		"Subject: " + m.Message.Subject + "\r\n" +
-		"\r\n" +
-		m.Message.Body + "\r\n")
-}
-
-func (m *Mail) To() string {
-	var to string
-	for _, receiver := range m.Receivers {
-		to += receiver + ", "
-	}
-	to = to[:len(to)-2]
-	return to
-}
-
-func (s smtpConf) address() string {
-	return s.host + ":" + s.port
-}
-
+// NewMail gets the env information from de yaml file and updates the mail config
 func NewMail() (mail *Mail, err error) {
 	viper.AddConfigPath("/go/src")
 	viper.SetConfigName("mailConfig")
@@ -105,4 +76,40 @@ func NewMail() (mail *Mail, err error) {
 		},
 	}
 	return
+}
+
+// Send sends the e-mail using de smtp package
+func (m *Mail) Send() {
+	err := smtp.SendMail(m.smtp.address(), m.auth(), m.sender.id, m.Receivers, m.byte())
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	fmt.Println("Email sent successfully")
+}
+
+// To prints the receivers
+func (m *Mail) To() string {
+	var to string
+	for _, receiver := range m.Receivers {
+		to += receiver + ", "
+	}
+	to = to[:len(to)-2]
+	return to
+}
+
+// auth returns a smtp.auth based on the mail credentials
+func (m *Mail) auth() smtp.Auth {
+	return smtp.PlainAuth("", m.sender.id, m.sender.password, m.smtp.host)
+}
+
+func (m *Mail) byte() []byte {
+	return []byte("To: " + m.Message.To + "\r\n" +
+		"Subject: " + m.Message.Subject + "\r\n" +
+		"\r\n" +
+		m.Message.Body + "\r\n")
+}
+
+func (s smtpConf) address() string {
+	return s.host + ":" + s.port
 }
