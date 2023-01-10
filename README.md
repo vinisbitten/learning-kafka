@@ -1,24 +1,24 @@
 <style>
-    .logos {
-        background-color: yellow;
-        list-style-type: none;
-        text-align: center;
-        margin: 0;
-        padding: 0;
-        border-radius: 40px;
-    }
-    .logos li {
-        display: inline-block;
-        font-size: 20px;
-        padding: 20px;
-    }
-    #kafka {
-        width:150px;
-    }
-    #go {
-        width:60px;
-        vertical-align:-45%
-    }
+.logos {
+background-color: yellow;
+list-style-type: none;
+text-align: center;
+margin: 0;
+padding: 0;
+border-radius: 40px;
+}
+.logos li {
+display: inline-block;
+font-size: 20px;
+padding: 20px;
+}
+#kafka {
+width:150px;
+}
+#go {
+width:60px;
+vertical-align:-45%
+}
 </style>
 <ul class="logos">
     <li><img src="/assets/go.png" alt="go" id="go">
