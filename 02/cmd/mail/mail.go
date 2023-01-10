@@ -57,7 +57,7 @@ func (m *Mail) DecodeJson(message []byte) {
 // NewMail gets the env information from de yaml file and updates the mail config
 func NewMail() (mail *Mail, err error) {
 	viper.AddConfigPath("/go/src")
-	viper.SetConfigName("mailConfig")
+	viper.SetConfigName("mailconf")
 	viper.SetConfigType("yaml")
 
 	err = viper.ReadInConfig()

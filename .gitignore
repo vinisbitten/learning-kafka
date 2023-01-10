@@ -1,3 +1,4 @@
 .idea/
 go.sum
-mailConfig.yaml
+go.work.sum
+mailconf.yaml

@@ -1,13 +1,20 @@
+![banner](/assets/Banner.png)
+
 # Learning Kafka
 
-This is a repository to save my kafka progress. I'll be working with Go while learning the Kafka technologies.Remember to remove the docker containers after finishing each project.
+>This is a repository to save my learning progress in kafka. I'll be working with Go while learning the Kafka technologies. **Remember to remove the docker containers after finishing each project**.
 
-## Project 01
+Go to project:
 
-This my first project working with Kafka.
-A simple kafka producer and consumer using Go.
+>* <a href="p01">Project 01</a>
+>* <a href="p02">Project 02</a>
 
-Some important docker commands:
+<h2 id="p01">## Project 01</h2>
+
+>* Here we'll learn the **basic kafka structure**.
+>* We'll create simple kafka producer and consumer using Go.
+
+*Some important commands:*
 
 ### bash
 
@@ -21,7 +28,9 @@ docker exec -it go-kafka bash
 docker exec -it kafka-container bash
 ```
 
-### kafka (inside kafka-container container)
+### kafka
+
+run these commands inside "kafka-container" container.
 
 ```bash
 # create topic
@@ -34,7 +43,9 @@ kafka-console-consumer --bootstrap-server localhost:9092 --topic first --group -
 kafka-console-producer --bootstrap-server localhost:9092 --topic first
 ```
 
-### go (inside go-kafka container)
+### go
+
+run these commands inside "go-kafka" container.
 
 ```bash
 # run consumer
@@ -43,12 +54,16 @@ go run cmd/consumer/main.go
 go run cmd/producer/main.go
 ```
 
-## Project 02
+<h2 id="p02">Project 02</h2>
 
-In this project I used a Kafka to send emails.
-The mail package has all the functions to consume kafka messages.
-You will have to create a mailConfig.yaml file with your email config (smtp config, email and password).
-You will be using the same command from project 01 to run the docker containers and kafka config.
+>* Producing and consuming e-mails with kafka.
+>* We'll use the go smtp package to **send e-mails**.
+
+* In this project there's a struct called *mail* that has all the attributes and methods we'll use while working with the e-mails.
+* You will have to create a mailconf.yaml file with your email config (smtp config, email and password)
+* You will be using the same kafka and docker configuration from project 01.
+
+*Some important commands:*
 
 ### go
 
@@ -63,7 +78,7 @@ go run cmd/mail-producer/mail-producer.go
 
 ```yaml
 # create a file like this
-# name it "mailConfig.yaml"
+# name it "mailconf.yaml"
 # put it in in the directory /02
 # use your real config
 host:     "smtp.domain.com"
