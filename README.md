@@ -62,7 +62,7 @@ go run cmd/producer/main.go
 >* We'll use the go smtp package to **send e-mails**.
 
 * In this project there's a struct called *mail* that has all the attributes and methods we'll use while working with the e-mails.
-* You will have to create a mailconf.yaml file with your email config (smtp config, email and password)
+* You will have to create a mailconf.yaml file with your email config (smtp config, email and password).
 * You will be using the same kafka and docker configuration from project 01.
 
 *Some important commands:*
