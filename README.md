@@ -1,15 +1,43 @@
-![banner](/assets/Banner.png)
+<style>
+    .logos {
+        background-color: yellow;
+        list-style-type: none;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        border-radius: 40px;
+    }
+    .logos li {
+        display: inline-block;
+        font-size: 20px;
+        padding: 20px;
+    }
+    #kafka {
+        width:150px;
+    }
+    #go {
+        width:60px;
+        vertical-align:-45%
+    }
+</style>
+<ul class="logos">
+    <li><img src="/assets/go.png" alt="go" id="go">
+    <li>
+    <li><img src="/assets/kafka.png" alt="kafka" id="kafka">
+</ul>
 
 # Learning Kafka
 
 >This is a repository to save my learning progress in kafka. I'll be working with Go while learning the Kafka technologies. **Remember to remove the docker containers after finishing each project**.
 
-Go to project:
+<br>
 
->* <a href="p01">Project 01</a>
->* <a href="p02">Project 02</a>
+**Go to:**
+ * <a href="#p01" style="color:#523674">Project 01 - Basic kafka</a>
 
-<h2 id="p01">## Project 01</h2>
+ * <a href="#p02" style="color:#523674">Project 02 - Sending mail</a>
+
+<h2 id="p01">Project 01</h2>
 
 >* Here we'll learn the **basic kafka structure**.
 >* We'll create simple kafka producer and consumer using Go.
